@@ -1,0 +1,142 @@
+[
+  {
+    "name": "Rahul Sharma",
+    "college": "VESIT",
+    "college_tier": "Tier3",
+    "resume_text": "Full Stack Developer proficient in Python, FastAPI, and React. Managed a production deployment for local vendors. Experienced with SQL databases and microservices architecture.",
+    "github_handle": "rahuldev_99",
+    "mock_github_data": {
+      "repo_count": 24,
+      "total_stars": 145,
+      "languages": ["Python", "JavaScript", "TypeScript", "HTML", "CSS"],
+      "commit_frequency_per_month": 42,
+      "avg_readme_length": 1850
+    }
+  },
+  {
+    "name": "Priya Patel",
+    "college": "Self-Taught Coder",
+    "college_tier": "SelfTaught",
+    "resume_text": "Frontend Specialist. Expert in React, Next.js, and state management. Passionate about building highly responsive UI components and open source optimization tools.",
+    "github_handle": "priya_codes",
+    "mock_github_data": {
+      "repo_count": 18,
+      "total_stars": 89,
+      "languages": ["JavaScript", "TypeScript", "Rust"],
+      "commit_frequency_per_month": 35,
+      "avg_readme_length": 2200
+    }
+  },
+  {
+    "name": "Amit Verma",
+    "college": "Sardar Patel College of Engineering",
+    "college_tier": "Tier2",
+    "resume_text": "Computer Science student focused on backend systems, REST APIs, and database migrations using Node.js, Express, and PostgreSQL.",
+    "github_handle": "amit_verma_dev",
+    "mock_github_data": {
+      "repo_count": 8,
+      "total_stars": 12,
+      "languages": ["JavaScript", "HTML"],
+      "commit_frequency_per_month": 12,
+      "avg_readme_length": 650
+    }
+  },
+  {
+    "name": "Rohan Das",
+    "college": "IIT Bombay",
+    "college_tier": "Tier1",
+    "resume_text": "B.Tech CSE student. Competitve programming specialist. Completed short summer internship at Amazon optimizing cloud-based distribution networks.",
+    "github_handle": "rohan_iitb",
+    "mock_github_data": {
+      "repo_count": 5,
+      "total_stars": 4,
+      "languages": ["C++", "Python"],
+      "commit_frequency_per_month": 8,
+      "avg_readme_length": 300
+    }
+  },
+  {
+    "name": "Ananya Iyer",
+    "college": "BITS Pilani",
+    "college_tier": "Tier1",
+    "resume_text": "Electronics and CS dual major. Research intern at an enterprise AI lab working on deep learning computer vision architectures with PyTorch.",
+    "github_handle": "ananya_ai",
+    "mock_github_data": {
+      "repo_count": 9,
+      "total_stars": 45,
+      "languages": ["Python", "C++", "MATLAB"],
+      "commit_frequency_per_month": 18,
+      "avg_readme_length": 1100
+    }
+  },
+  {
+    "name": "Vikram Singh",
+    "college": "Vellore Institute of Technology",
+    "college_tier": "Tier2",
+    "resume_text": "UI/UX enthusiast and frontend engineer. Highly skilled in Tailwind CSS, Vue.js, Figma conversions, and static site generation protocols.",
+    "github_handle": "vikram_ui",
+    "mock_github_data": {
+      "repo_count": 14,
+      "total_stars": 22,
+      "languages": ["HTML", "CSS", "JavaScript", "Vue"],
+      "commit_frequency_per_month": 15,
+      "avg_readme_length": 800
+    }
+  },
+  {
+    "name": "Sneha Reddy",
+    "college": "G. Pulla Reddy Engineering College",
+    "college_tier": "Tier3",
+    "resume_text": "Systems Engineer. Deep focus on systems programming with Go, Network Proxies, WebSockets, and distributed memory management pipelines using Redis.",
+    "github_handle": "sneha_go",
+    "mock_github_data": {
+      "repo_count": 31,
+      "total_stars": 210,
+      "languages": ["Go", "Python", "Docker", "Shell"],
+      "commit_frequency_per_month": 55,
+      "avg_readme_length": 3100
+    }
+  },
+  {
+    "name": "Kabir Mehta",
+    "college": "Delhi Technological University",
+    "college_tier": "Tier1",
+    "resume_text": "Software Engineering undergraduate. Well versed in Java Spring Boot ecosystem, structural database patterns, and object-oriented architectural systems.",
+    "github_handle": "kabir_dev",
+    "mock_github_data": {
+      "repo_count": 6,
+      "total_stars": 8,
+      "languages": ["Java", "SQL"],
+      "commit_frequency_per_month": 10,
+      "avg_readme_length": 450
+    }
+  },
+  {
+    "name": "Nisha Ali",
+    "college": "Rizvi College of Engineering",
+    "college_tier": "Tier3",
+    "resume_text": "Android Developer learning Kotlin and native layouts. Built basic calculator systems and personal finance trackers for academic submissions.",
+    "github_handle": "nisha_apps",
+    "mock_github_data": {
+      "repo_count": 4,
+      "total_stars": 1,
+      "languages": ["Kotlin", "Java"],
+      "commit_frequency_per_month": 5,
+      "avg_readme_length": 250
+    }
+  },
+  {
+    "name": "Divya Joshi",
+    "college": "Thadomal Shahani Engineering College",
+    "college_tier": "Tier2",
+    "resume_text": "Data Science student exploring predictive modeling. Proficient in Pandas, NumPy, Scikit-Learn, and regression algorithm visualizations.",
+    "github_handle": "divya_ds",
+    "mock_github_data": {
+      "repo_count": 7,
+      "total_stars": 3,
+      "languages": ["Python", "Jupyter"],
+      "commit_frequency_per_month": 6,
+      "avg_readme_length": 400
+    }
+  }
+]
