@@ -1,0 +1,12 @@
+BTech Computer Science
+IIT Bombay
+
+Intern at Google
+
+Skills:
+Python
+Machine Learning
+Data Structures
+
+Projects:
+Stock prediction using LSTM

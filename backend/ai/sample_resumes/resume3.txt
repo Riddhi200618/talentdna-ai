@@ -1,0 +1,12 @@
+BTech IT
+XYZ Engineering College
+
+Intern at local startup
+
+Skills:
+Java
+SQL
+React
+
+Projects:
+Ecommerce Website

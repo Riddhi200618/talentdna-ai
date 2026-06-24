@@ -1,0 +1,19 @@
+Niharika Pawar
+
+BTech Computer Engineering
+PCCOE Pune
+
+Skills:
+Python
+Java
+Machine Learning
+FastAPI
+React
+
+Internship:
+AI Intern at ABC Technologies
+
+Projects:
+AI Resume Analyzer
+Stock Market Prediction using LSTM
+Smart Attendance System
