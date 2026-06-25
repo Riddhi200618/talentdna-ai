@@ -6,12 +6,16 @@ from backend.models import CandidateCreate, CandidateResponse
 from typing import List
 import json
 
+# Integration Modules (Added for Day 2 Integration)
+from backend.ai.prompts import parse_resume
+from scoring.engine import evaluate_candidate_performance
+
 router = APIRouter()
 
 
 @router.post("/candidate")
 def create_candidate(candidate: CandidateCreate, db: Session = Depends(get_db)):
-    # Step 1: Save the candidate to the candidates table
+    # Step 1: Save the candidate basic info to the candidates table
     db_candidate = Candidate(
         name=candidate.name,
         college=candidate.college,
@@ -23,39 +27,67 @@ def create_candidate(candidate: CandidateCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_candidate)  # This populates db_candidate.id after insert
 
-    # Step 2: Create an empty score row for this candidate
-    # Scores will be filled in when Person 1 and Person 4's code is wired in
+    # Step 2: Process AI Resume Insights (Person 1 Layer integration)
+    try:
+        ai_insights = parse_resume(candidate.resume_text)
+    except Exception:
+        ai_insights = {
+            "skills": [], 
+            "technologies": [], 
+            "education_tier": candidate.college_tier,
+            "has_internship": False, 
+            "company_quality_score": 0
+        }
+
+    # Step 3: Fetch GitHub Metrics (Person 3 Fallback/Mock Interceptor for Day 2 testing)
+    mock_github_metrics = {
+        "repo_count": 12,
+        "total_stars": 35,
+        "languages": ai_insights.get("technologies", ["Python", "JavaScript"]),
+        "commit_frequency_per_month": 25,
+        "avg_readme_length": 1500
+    }
+
+    # Step 4: Process Scoring Engine pipeline logic (Person 4 Core Execution Matrix)
+    scores = evaluate_candidate_performance(
+        college_tier=candidate.college_tier,
+        github_metrics=mock_github_metrics,
+        ai_resume_insights=ai_insights
+    )
+
+    # Step 5: Create and populate the score row for this candidate
     db_score = Score(
         candidate_id=db_candidate.id,
-        project_score=0,
-        velocity_score=0,
-        problem_score=0,
-        initiative_score=0,
-        talent_dna_score=0,
-        pedigree_score=0,
-        gap=0,
-        is_diamond=False
+        project_score=scores["project_score"],
+        velocity_score=scores["velocity_score"],
+        problem_score=scores["problem_score"],
+        initiative_score=scores["initiative_score"],
+        talent_dna_score=scores["talent_dna_score"],
+        pedigree_score=scores["pedigree_score"],
+        gap=scores["gap"],
+        is_diamond=scores["is_diamond"]
     )
     db.add(db_score)
 
-    # Step 3: Create an empty analysis row for this candidate
+    # Step 6: Create and populate the analysis row for this candidate
     db_analysis = Analysis(
         candidate_id=db_candidate.id,
-        ai_summary=None,
-        top_skills=None,
+        ai_summary=f"Automated evaluation processed for {candidate.name}.",
+        top_skills=json.dumps(ai_insights.get("skills", [])),
         top_projects=None,
-        github_raw=None,
-        resume_parsed=None
+        github_raw=json.dumps(mock_github_metrics),
+        resume_parsed=json.dumps(ai_insights)
     )
     db.add(db_analysis)
 
     db.commit()
 
     return {
-        "message": "Candidate created successfully",
+        "message": "Candidate onboarded and processed successfully",
         "candidate_id": db_candidate.id,
         "name": db_candidate.name,
-        "status": "scoring_pending"
+        "scores": scores,
+        "status": "processed"
     }
 
 
@@ -199,6 +231,7 @@ def get_stats(db: Session = Depends(get_db)):
         "diamond_count": diamond_count,
         "average_gap": round(average_gap, 1)
     }
+
 
 @router.patch("/candidate/{candidate_id}/scores")
 def update_scores(candidate_id: int, scores: dict, db: Session = Depends(get_db)):
