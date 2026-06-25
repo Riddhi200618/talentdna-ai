@@ -47,3 +47,12 @@ class Analysis(Base):
     top_projects = Column(Text, nullable=True)      # JSON string of project summaries
     github_raw = Column(Text, nullable=True)        # Raw GitHub API response as JSON string
     resume_parsed = Column(Text, nullable=True)     # Raw AI resume parse result as JSON string
+
+    from contextlib import contextmanager
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
