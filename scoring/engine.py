@@ -66,8 +66,9 @@ def evaluate_candidate_performance(
     pedigree_score = round(calculate_pedigree_score(college_tier), 2)
     gap = round(talent_dna_score - pedigree_score, 2)
 
+    # UPDATED DIAMOND THRESHOLD (OPTION A AS PER TEAM DESIGN DIRECTION)
     is_diamond = False
-    if college_tier in ["Tier3", "SelfTaught"] and talent_dna_score >= 75.0 and gap >= 20.0:
+    if college_tier in ["Tier3", "SelfTaught"] and talent_dna_score >= 45.0 and gap >= 10.0:
         is_diamond = True
 
     return {
