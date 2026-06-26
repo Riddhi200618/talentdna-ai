@@ -7,7 +7,10 @@ from typing import List
 import json
 
 # Integration Modules (Added for Day 2 Integration)
-from backend.ai.prompts import parse_resume
+from backend.ai.prompts import (
+    parse_resume,
+    generate_candidate_summary
+)
 from scoring.engine import evaluate_candidate_performance
 
 router = APIRouter()
@@ -55,6 +58,14 @@ def create_candidate(candidate: CandidateCreate, db: Session = Depends(get_db)):
         ai_resume_insights=ai_insights
     )
 
+    ai_summary = generate_candidate_summary(
+        talent_score=scores["talent_dna_score"],
+        pedigree_score=scores["pedigree_score"],
+        github_score=scores["project_score"],
+        resume_score=scores["initiative_score"],
+        is_diamond=scores["is_diamond"]
+    )
+
     # Step 5: Create and populate the score row for this candidate
     db_score = Score(
         candidate_id=db_candidate.id,
@@ -72,7 +83,7 @@ def create_candidate(candidate: CandidateCreate, db: Session = Depends(get_db)):
     # Step 6: Create and populate the analysis row for this candidate
     db_analysis = Analysis(
         candidate_id=db_candidate.id,
-        ai_summary=f"Automated evaluation processed for {candidate.name}.",
+        ai_summary=ai_summary,
         top_skills=json.dumps(ai_insights.get("skills", [])),
         top_projects=None,
         github_raw=json.dumps(mock_github_metrics),

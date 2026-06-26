@@ -189,3 +189,48 @@ README:
         }
 
     return clean_json_response(response.text)
+
+def generate_candidate_summary(
+    talent_score,
+    pedigree_score,
+    github_score,
+    resume_score,
+    is_diamond
+):
+
+    prompt = f"""
+You are an experienced technical recruiter.
+
+Write a short recruiter-facing summary.
+
+Return ONLY plain text.
+
+Candidate Data
+
+TalentDNA Score: {talent_score}
+
+Pedigree Score: {pedigree_score}
+
+GitHub Score: {github_score}
+
+Resume Score: {resume_score}
+
+Diamond Candidate: {is_diamond}
+
+Rules:
+
+- Maximum 2 sentences.
+- Maximum 40 words.
+- Mention the strongest technical signals.
+- Mention if TalentDNA exceeds pedigree.
+- Do not exaggerate.
+- Do not use bullet points.
+"""
+
+    try:
+        response = model.generate_content(prompt)
+        return response.text.strip()
+
+    except Exception as e:
+        print(f"Gemini API Error: {e}")
+        return "Candidate analysis unavailable."
