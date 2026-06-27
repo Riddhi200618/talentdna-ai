@@ -66,7 +66,7 @@ candidates = [
         "college": "Indore Institute of Science",
         "college_tier": "Tier3",
         "resume_text": "Tier3 college graduate from Indore. No internships. Taught himself machine learning from Coursera and fast.ai. Built an image classification model deployed on AWS Lambda with 1000 daily requests.",
-        "github_handle": "fastai"
+        "github_handle": "karpathy"
     },
     {
         "name": "Meera Iyer",

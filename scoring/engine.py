@@ -68,7 +68,7 @@ def evaluate_candidate_performance(
 
     # UPDATED DIAMOND THRESHOLD (OPTION A AS PER TEAM DESIGN DIRECTION)
     is_diamond = False
-    if college_tier in ["Tier3", "SelfTaught"] and talent_dna_score >= 45.0 and gap >= 10.0:
+    if college_tier in ["Tier3", "SelfTaught"] and talent_dna_score >= 40.0 and gap >= 5.0:
         is_diamond = True
 
     return {
