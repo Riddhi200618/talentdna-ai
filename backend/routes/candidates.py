@@ -186,6 +186,43 @@ def get_candidate(candidate_id: int, db: Session = Depends(get_db)):
         }
     }
 
+@router.get("/candidates")
+def get_all_candidates(db: Session = Depends(get_db)):
+    candidates = db.query(Candidate).all()
+
+    result = []
+
+    for c in candidates:
+        score = db.query(Score).filter(Score.candidate_id == c.id).first()
+        analysis = db.query(Analysis).filter(Analysis.candidate_id == c.id).first()
+
+        top_skills = []
+        if analysis and analysis.top_skills:
+            try:
+                top_skills = json.loads(analysis.top_skills)
+            except:
+                top_skills = []
+
+        result.append({
+            "id": c.id,
+            "name": c.name,
+            "college": c.college,
+            "college_tier": c.college_tier,
+            "github_handle": c.github_handle,
+            "talent_dna_score": score.talent_dna_score if score else 0,
+            "pedigree_score": score.pedigree_score if score else 0,
+            "gap": score.gap if score else 0,
+            "is_diamond": score.is_diamond if score else False,
+            "top_skills": top_skills,
+            "ai_summary": analysis.ai_summary if analysis else None
+        })
+
+    result.sort(key=lambda x: x["talent_dna_score"], reverse=True)
+
+    return {
+        "total": len(result),
+        "candidates": result
+    }
 
 @router.get("/diamonds")
 def get_diamond_candidates(db: Session = Depends(get_db)):
