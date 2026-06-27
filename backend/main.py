@@ -31,3 +31,8 @@ def health_check():
         "product": "TalentDNA AI",
         "version": "1.0.0"
     }
+
+# Yeh code file ke bilkul niche check karke paste kar dena:
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("backend.main:app", host="127.0.0.1", port=8000, reload=True)
