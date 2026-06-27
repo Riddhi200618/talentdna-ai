@@ -128,43 +128,62 @@ def create_candidate(candidate: CandidateCreate, db: Session = Depends(get_db)):
     }
 
 
-@router.get("/candidates")
-def get_all_candidates(db: Session = Depends(get_db)):
-    # Join candidates with their scores
-    candidates = db.query(Candidate).all()
+@router.get("/candidate/{candidate_id}")
+def get_candidate(candidate_id: int, db: Session = Depends(get_db)):
+    candidate = db.query(Candidate).filter(Candidate.id == candidate_id).first()
 
-    result = []
-    for c in candidates:
-        score = db.query(Score).filter(Score.candidate_id == c.id).first()
-        analysis = db.query(Analysis).filter(Analysis.candidate_id == c.id).first()
+    if not candidate:
+        raise HTTPException(status_code=404, detail="Candidate not found")
 
-        top_skills = []
-        if analysis and analysis.top_skills:
+    score = db.query(Score).filter(Score.candidate_id == candidate_id).first()
+    analysis = db.query(Analysis).filter(Analysis.candidate_id == candidate_id).first()
+
+    top_skills = []
+    top_projects = []
+
+    if analysis:
+        if analysis.top_skills:
             try:
                 top_skills = json.loads(analysis.top_skills)
             except:
                 top_skills = []
+        if analysis.top_projects:
+            try:
+                top_projects = json.loads(analysis.top_projects)
+            except:
+                top_projects = []
 
-        result.append({
-            "id": c.id,
-            "name": c.name,
-            "college": c.college,
-            "college_tier": c.college_tier,
-            "github_handle": c.github_handle,
+    return {
+        "id": candidate.id,
+        "name": candidate.name,
+        "college": candidate.college,
+        "college_tier": candidate.college_tier,
+        "github_handle": candidate.github_handle,
+        "scores": {
+            "project_score": score.project_score if score else 0,
+            "velocity_score": score.velocity_score if score else 0,
+            "problem_score": score.problem_score if score else 0,
+            "initiative_score": score.initiative_score if score else 0,
             "talent_dna_score": score.talent_dna_score if score else 0,
             "pedigree_score": score.pedigree_score if score else 0,
             "gap": score.gap if score else 0,
-            "is_diamond": score.is_diamond if score else False,
+            "is_diamond": score.is_diamond if score else False
+        },
+        "analysis": {
+            "ai_summary": analysis.ai_summary if analysis else None,
             "top_skills": top_skills,
-            "ai_summary": analysis.ai_summary if analysis else None
-        })
-
-    # Sort by TalentDNA score descending
-    result.sort(key=lambda x: x["talent_dna_score"], reverse=True)
-
-    return {
-        "total": len(result),
-        "candidates": result
+            "top_projects": top_projects
+        },
+        "ats_would_see": {
+            "college": candidate.college,
+            "pedigree_score": score.pedigree_score if score else 0,
+            "verdict": "Shortlisted" if (score and score.pedigree_score >= 75) else "Rejected"
+        },
+        "talentdna_sees": {
+            "talent_dna_score": score.talent_dna_score if score else 0,
+            "is_diamond": score.is_diamond if score else False,
+            "verdict": "Diamond — Surface Immediately" if (score and score.is_diamond) else "Strong Candidate" if (score and score.talent_dna_score >= 60) else "Average Candidate"
+        }
     }
 
 
