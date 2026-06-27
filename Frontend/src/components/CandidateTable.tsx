@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { DiamondBadge } from "./DiamondBadge";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
+import { cn } from "../utils/cn";
 import type { Candidate } from "../types";
 
 type SortKey = keyof Pick<
@@ -52,11 +53,15 @@ export function CandidateTable({ candidates, onSelectCandidate }: CandidateTable
     setSortDirection("desc");
   }
 
+  function formatScore(value: number) {
+    return Number.isInteger(value) ? value : value.toFixed(1);
+  }
+
   return (
     <Card className="overflow-hidden shadow-sm">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[920px] border-collapse text-left text-sm">
-          <thead className="sticky top-0 z-10 bg-slate-50 text-xs uppercase tracking-normal text-slate-500">
+          <thead className="sticky top-0 z-10 bg-slate-50 text-xs uppercase tracking-normal text-slate-500 shadow-sm">
             <tr>
               {columns.map((column) => (
                 <th key={column.key} className="px-5 py-4 font-semibold">
@@ -78,7 +83,11 @@ export function CandidateTable({ candidates, onSelectCandidate }: CandidateTable
             {sortedCandidates.map((candidate) => (
               <tr
                 key={candidate.id}
-                className="cursor-pointer transition-colors hover:bg-blue-50/50"
+                className={cn(
+                  "cursor-pointer transition-all hover:bg-blue-50/70 hover:shadow-sm",
+                  candidate.diamondStatus === "Diamond" &&
+                    "bg-blue-50/60 ring-1 ring-inset ring-blue-100",
+                )}
                 onClick={() => onSelectCandidate(candidate)}
               >
                 <td className="px-5 py-4">
@@ -89,13 +98,13 @@ export function CandidateTable({ candidates, onSelectCandidate }: CandidateTable
                 </td>
                 <td className="px-5 py-4 text-slate-600">{candidate.college}</td>
                 <td className="px-5 py-4 text-right font-semibold text-slate-950">
-                  {candidate.talentDnaScore}
+                  {formatScore(candidate.talentDnaScore)}
                 </td>
                 <td className="px-5 py-4 text-right text-slate-600">
-                  {candidate.pedigreeScore}
+                  {formatScore(candidate.pedigreeScore)}
                 </td>
                 <td className="px-5 py-4 text-right font-semibold text-emerald-600">
-                  +{candidate.gap}
+                  +{formatScore(candidate.gap)}
                 </td>
                 <td className="px-5 py-4">
                   <DiamondBadge status={candidate.diamondStatus} />

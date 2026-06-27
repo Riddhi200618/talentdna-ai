@@ -21,6 +21,33 @@ export default function DiamondPanelPage() {
 
   return (
     <div className="space-y-6">
+      <div className="rounded-lg border border-blue-100 bg-white p-6 shadow-sm">
+        <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-normal text-blue-700">
+              ATS sees pedigree. TalentDNA sees actual talent.
+            </p>
+            <h1 className="mt-2 text-3xl font-bold tracking-normal text-slate-950 sm:text-4xl">
+              Surface overlooked builders before competitors do.
+            </h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
+              Diamond candidates combine strong execution signals with a high pedigree gap,
+              giving recruiters a focused shortlist for immediate review.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-lg bg-slate-50 p-4">
+              <p className="text-sm text-slate-500">Traditional screen</p>
+              <p className="mt-2 text-2xl font-bold text-slate-700">Pedigree</p>
+            </div>
+            <div className="rounded-lg bg-blue-50 p-4 ring-1 ring-blue-100">
+              <p className="text-sm text-blue-700">TalentDNA screen</p>
+              <p className="mt-2 text-2xl font-bold text-blue-950">Potential</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <SectionHeader
         eyebrow="Hidden Talent"
         title="Diamond Panel"
@@ -39,7 +66,7 @@ export default function DiamondPanelPage() {
         <ScoreCard label="AI Summaries" value={diamonds.length} icon={Sparkles} tone="amber" />
       </div>
 
-      {isLoading ? <LoadingState label="Loading diamond candidates" /> : null}
+      {isLoading ? <LoadingState label="Loading diamond candidates" variant="cards" /> : null}
 
       {!isLoading && error ? (
         <EmptyState
