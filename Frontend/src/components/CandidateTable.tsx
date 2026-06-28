@@ -25,6 +25,15 @@ const columns: { key: SortKey; label: string; align?: "left" | "right" }[] = [
   { key: "diamondStatus", label: "Diamond Status" },
 ];
 
+function formatScore(value: number) {
+  return Number.isInteger(value) ? value : value.toFixed(1);
+}
+
+function formatGap(value: number) {
+  const formatted = formatScore(Math.abs(value));
+  return `${value >= 0 ? "+" : "-"}${formatted}`;
+}
+
 export function CandidateTable({ candidates, onSelectCandidate }: CandidateTableProps) {
   const [sortKey, setSortKey] = useState<SortKey>("talentDnaScore");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
@@ -51,10 +60,6 @@ export function CandidateTable({ candidates, onSelectCandidate }: CandidateTable
 
     setSortKey(key);
     setSortDirection("desc");
-  }
-
-  function formatScore(value: number) {
-    return Number.isInteger(value) ? value : value.toFixed(1);
   }
 
   return (
@@ -103,8 +108,13 @@ export function CandidateTable({ candidates, onSelectCandidate }: CandidateTable
                 <td className="px-5 py-4 text-right text-slate-600">
                   {formatScore(candidate.pedigreeScore)}
                 </td>
-                <td className="px-5 py-4 text-right font-semibold text-emerald-600">
-                  +{formatScore(candidate.gap)}
+                <td
+                  className={cn(
+                    "px-5 py-4 text-right font-semibold",
+                    candidate.gap >= 0 ? "text-emerald-600" : "text-red-600",
+                  )}
+                >
+                  {formatGap(candidate.gap)}
                 </td>
                 <td className="px-5 py-4">
                   <DiamondBadge status={candidate.diamondStatus} />

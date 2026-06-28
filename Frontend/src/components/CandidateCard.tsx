@@ -11,6 +11,15 @@ interface CandidateCardProps {
   onView?: (candidate: Candidate) => void;
 }
 
+function formatScore(value: number) {
+  return Number.isInteger(value) ? value : value.toFixed(1);
+}
+
+function formatGap(value: number) {
+  const formatted = formatScore(Math.abs(value));
+  return `${value >= 0 ? "+" : "-"}${formatted}`;
+}
+
 export function CandidateCard({ candidate, onView }: CandidateCardProps) {
   const aiSummary =
     candidate.aiSummary ?? "AI summary will appear once TalentDNA analysis is available.";
@@ -35,9 +44,9 @@ export function CandidateCard({ candidate, onView }: CandidateCardProps) {
         <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
           <p className="text-sm font-medium text-blue-700">TalentDNA Score</p>
           <div className="mt-1 flex items-end justify-between gap-3">
-            <p className="text-4xl font-bold text-blue-950">{candidate.talentDnaScore}</p>
+            <p className="text-4xl font-bold text-blue-950">{formatScore(candidate.talentDnaScore)}</p>
             <div className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-emerald-700">
-              +{candidate.gap} gap
+              {formatGap(candidate.gap)} gap
             </div>
           </div>
           <Progress value={candidate.talentDnaScore} className="mt-4" />
@@ -45,14 +54,16 @@ export function CandidateCard({ candidate, onView }: CandidateCardProps) {
         <div className="grid grid-cols-2 gap-3 text-sm">
           <div className="rounded-md border bg-white p-3">
             <p className="text-muted-foreground">Pedigree</p>
-            <p className="mt-1 font-semibold text-slate-950">{candidate.pedigreeScore}</p>
+            <p className="mt-1 font-semibold text-slate-950">{formatScore(candidate.pedigreeScore)}</p>
           </div>
           <div className="rounded-md border bg-white p-3">
             <div className="flex items-center gap-1.5 text-muted-foreground">
               <TrendingUp className="h-3.5 w-3.5" aria-hidden="true" />
-              Hidden Upside
+              Gap
             </div>
-            <p className="mt-1 font-semibold text-emerald-600">+{candidate.gap}</p>
+            <p className={candidate.gap >= 0 ? "mt-1 font-semibold text-emerald-600" : "mt-1 font-semibold text-red-600"}>
+              {formatGap(candidate.gap)}
+            </p>
           </div>
         </div>
         {candidate.topSkills && candidate.topSkills.length > 0 ? (

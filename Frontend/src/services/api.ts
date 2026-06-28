@@ -9,7 +9,7 @@ import type {
   UploadResponse,
 } from "../types";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ?? "";
 
 class ApiError extends Error {
   status: number;
@@ -22,6 +22,10 @@ class ApiError extends Error {
 }
 
 async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  if (!API_BASE_URL) {
+    throw new ApiError("Missing VITE_API_BASE_URL. Set it to the production API base URL.", 0);
+  }
+
   let response: Response;
 
   try {
@@ -33,7 +37,7 @@ async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
       ...options,
     });
   } catch {
-    throw new ApiError("API unavailable. Confirm the backend is running on port 8000.", 0);
+    throw new ApiError("API unavailable. Confirm the configured backend is reachable.", 0);
   }
 
   if (!response.ok) {
@@ -58,43 +62,61 @@ function toNumber(value: unknown, fallback = 0): number {
   return typeof value === "number" && Number.isFinite(value) ? value : fallback;
 }
 
-function toStringArray(value: unknown): string[] {
-  return Array.isArray(value)
-    ? value.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
-    : [];
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
-function normalizeCandidate(candidate: ApiCandidate, index: number): Candidate {
+function toStringArray(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+  }
+
+  if (typeof value === "string" && value.trim().length > 0) {
+    try {
+      return toStringArray(JSON.parse(value) as unknown);
+    } catch {
+      return value
+        .split(",")
+        .map((item) => item.trim())
+        .filter((item) => item.length > 0);
+    }
+  }
+
+  return [];
+}
+
+function normalizeCandidate(candidate: unknown, index: number): Candidate {
+  const record = isRecord(candidate) ? (candidate as ApiCandidate) : {};
   const talentDnaScore = toNumber(
-    candidate.talentDnaScore ?? candidate.talent_dna_score ?? candidate.score,
+    record.talentDnaScore ?? record.talent_dna_score ?? record.score,
   );
-  const pedigreeScore = toNumber(candidate.pedigreeScore ?? candidate.pedigree_score);
-  const gap = toNumber(candidate.gap, talentDnaScore - pedigreeScore);
+  const pedigreeScore = toNumber(record.pedigreeScore ?? record.pedigree_score);
+  const gap = toNumber(record.gap, talentDnaScore - pedigreeScore);
   const isDiamond =
-    typeof candidate.is_diamond === "boolean"
-      ? candidate.is_diamond
-      : candidate.diamondStatus === "Diamond" || candidate.diamond_status === "Diamond";
+    typeof record.is_diamond === "boolean"
+      ? record.is_diamond
+      : record.diamondStatus === "Diamond" || record.diamond_status === "Diamond";
 
   return {
-    id: String(candidate.id ?? `candidate-${index}`),
-    name: candidate.name ?? candidate.candidate_name ?? "Unnamed Candidate",
-    college: candidate.college ?? "Unknown College",
-    collegeTier: candidate.college_tier,
+    id: String(record.id ?? `candidate-${index}`),
+    name: record.name ?? record.candidate_name ?? "Unnamed Candidate",
+    college: record.college ?? "Unknown College",
+    collegeTier: record.college_tier,
     talentDnaScore,
     pedigreeScore,
     gap,
     diamondStatus:
-      candidate.diamondStatus ??
-      candidate.diamond_status ??
+      record.diamondStatus ??
+      record.diamond_status ??
       (isDiamond || gap >= 15 ? "Diamond" : talentDnaScore >= 80 ? "Rising" : "Standard"),
     aiSummary:
-      candidate.aiSummary ??
-      candidate.ai_summary ??
+      record.aiSummary ??
+      record.ai_summary ??
       "AI summary will appear once the backend returns candidate insights.",
-    topSkills: toStringArray(candidate.top_skills),
-    resumeText: candidate.resumeText ?? candidate.resume_text,
-    githubUsername: candidate.githubUsername ?? candidate.github_username ?? candidate.github_handle,
-    rawScores: candidate.rawScores ?? candidate.raw_scores,
+    topSkills: toStringArray(record.top_skills),
+    resumeText: record.resumeText ?? record.resume_text,
+    githubUsername: record.githubUsername ?? record.github_username ?? record.github_handle,
+    rawScores: record.rawScores ?? record.raw_scores,
   };
 }
 
@@ -109,6 +131,7 @@ interface DiamondsResponse {
 interface ApiCandidateDetail {
   id?: string | number;
   name?: string;
+  college?: string;
   scores?: {
     project_score?: number;
     velocity_score?: number;
@@ -120,7 +143,7 @@ interface ApiCandidateDetail {
     is_diamond?: boolean;
   };
   analysis?: {
-    ai_summary?: string;
+    ai_summary?: string | null;
     top_skills?: unknown;
     top_projects?: unknown;
   };
@@ -142,23 +165,35 @@ interface ApiStats {
   average_gap?: number;
 }
 
-function unwrapCandidates(payload: ApiCandidate[] | CandidatesResponse): ApiCandidate[] {
+function unwrapCandidates(payload: unknown): ApiCandidate[] {
   if (Array.isArray(payload)) {
     return payload;
   }
 
-  return Array.isArray(payload.candidates) ? payload.candidates : [];
+  return isRecord(payload) && Array.isArray((payload as CandidatesResponse).candidates)
+    ? (payload as CandidatesResponse).candidates ?? []
+    : [];
 }
 
-function unwrapDiamonds(payload: ApiCandidate[] | DiamondsResponse): ApiCandidate[] {
+function unwrapDiamonds(payload: unknown): ApiCandidate[] {
   if (Array.isArray(payload)) {
     return payload;
   }
 
-  return Array.isArray(payload.diamonds) ? payload.diamonds : [];
+  return isRecord(payload) && Array.isArray((payload as DiamondsResponse).diamonds)
+    ? (payload as DiamondsResponse).diamonds ?? []
+    : [];
 }
 
 function normalizeProjects(projects: unknown): CandidateProject[] {
+  if (typeof projects === "string" && projects.trim().length > 0) {
+    try {
+      return normalizeProjects(JSON.parse(projects) as unknown);
+    } catch {
+      return [];
+    }
+  }
+
   if (!Array.isArray(projects)) {
     return [];
   }
@@ -169,16 +204,14 @@ function normalizeProjects(projects: unknown): CandidateProject[] {
         return { name: project };
       }
 
-      if (project && typeof project === "object") {
-        const record = project as Record<string, unknown>;
+      if (isRecord(project)) {
         return {
           name:
-            typeof record.name === "string" && record.name.trim().length > 0
-              ? record.name
+            typeof project.name === "string" && project.name.trim().length > 0
+              ? project.name
               : `Project ${index + 1}`,
-          description:
-            typeof record.description === "string" ? record.description : undefined,
-          url: typeof record.url === "string" ? record.url : undefined,
+          description: typeof project.description === "string" ? project.description : undefined,
+          url: typeof project.url === "string" ? project.url : undefined,
         };
       }
 
@@ -187,7 +220,16 @@ function normalizeProjects(projects: unknown): CandidateProject[] {
     .filter((project): project is CandidateProject => project !== null);
 }
 
-function normalizeCandidateDetail(detail: ApiCandidateDetail, fallback?: Candidate): CandidateDetail {
+function cleanVerdict(value: unknown, fallback: string): string {
+  if (typeof value !== "string" || value.trim().length === 0) {
+    return fallback;
+  }
+
+  return value.replace("â€”", "-");
+}
+
+function normalizeCandidateDetail(payload: unknown, fallback?: Candidate): CandidateDetail {
+  const detail = isRecord(payload) ? (payload as ApiCandidateDetail) : {};
   const talentDnaScore = toNumber(
     detail.scores?.talent_dna_score ?? detail.talentdna_sees?.talent_dna_score,
     fallback?.talentDnaScore,
@@ -226,27 +268,31 @@ function normalizeCandidateDetail(detail: ApiCandidateDetail, fallback?: Candida
       topProjects: normalizeProjects(detail.analysis?.top_projects),
     },
     atsWouldSee: {
-      college: detail.ats_would_see?.college ?? fallback?.college ?? "Unknown College",
+      college: detail.ats_would_see?.college ?? detail.college ?? fallback?.college ?? "Unknown College",
       pedigreeScore,
-      verdict: detail.ats_would_see?.verdict ?? "Not available",
+      verdict: cleanVerdict(
+        detail.ats_would_see?.verdict,
+        pedigreeScore >= 75 ? "Shortlisted by ATS" : "Likely rejected by ATS",
+      ),
     },
     talentDnaSees: {
       talentDnaScore,
       isDiamond,
-      verdict:
-        detail.talentdna_sees?.verdict ??
-        (isDiamond ? "Diamond - Surface Immediately" : "Review talent signals"),
+      verdict: cleanVerdict(
+        detail.talentdna_sees?.verdict,
+        isDiamond ? "Diamond - Surface Immediately" : "Review talent signals",
+      ),
     },
   };
 }
 
 export async function getCandidates(): Promise<Candidate[]> {
-  const data = await request<ApiCandidate[] | CandidatesResponse>("/candidates");
+  const data = await request<unknown>("/candidates");
   return unwrapCandidates(data).map(normalizeCandidate);
 }
 
 export async function getDiamonds(): Promise<DiamondCandidate[]> {
-  const data = await request<ApiCandidate[] | DiamondsResponse>("/diamonds");
+  const data = await request<unknown>("/diamonds");
   return unwrapDiamonds(data).map((candidate, index) => ({
     ...normalizeCandidate(candidate, index),
     aiSummary:
@@ -260,22 +306,33 @@ export async function getCandidateDetail(
   id: string,
   fallback?: Candidate,
 ): Promise<CandidateDetail> {
-  const data = await request<ApiCandidateDetail>(`/candidate/${id}`);
+  const data = await request<unknown>(`/candidate/${id}`);
   return normalizeCandidateDetail(data, fallback);
 }
 
 export async function getStats(): Promise<DashboardStats> {
-  const data = await request<ApiStats>("/stats");
+  const data = await request<unknown>("/stats");
+  const stats = isRecord(data) ? (data as ApiStats) : {};
   return {
-    totalCandidates: toNumber(data.total_candidates),
-    diamondCount: toNumber(data.diamond_count),
-    averageGap: toNumber(data.average_gap),
+    totalCandidates: toNumber(stats.total_candidates),
+    diamondCount: toNumber(stats.diamond_count),
+    averageGap: toNumber(stats.average_gap),
   };
 }
 
 export async function createCandidate(payload: UploadRequest): Promise<UploadResponse> {
-  return request<UploadResponse>("/candidate", {
+  const data = await request<unknown>("/candidate", {
     method: "POST",
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      name: payload.name,
+      college: payload.college,
+      college_tier: payload.collegeTier,
+      resume_text: payload.resumeText,
+      github_handle: payload.githubUsername,
+    }),
   });
+
+  return isRecord(data)
+    ? (data as unknown as UploadResponse)
+    : { message: "Candidate uploaded successfully.", candidate: null as never };
 }

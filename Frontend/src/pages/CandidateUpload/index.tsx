@@ -15,6 +15,7 @@ type FormErrors = Partial<Record<keyof UploadRequest, string>>;
 const initialForm: UploadRequest = {
   name: "",
   college: "",
+  collegeTier: "Tier3",
   resumeText: "",
   githubUsername: "",
 };
@@ -36,6 +37,10 @@ export default function CandidateUploadPage() {
 
     if (!form.college.trim()) {
       nextErrors.college = "College is required.";
+    }
+
+    if (!form.collegeTier) {
+      nextErrors.collegeTier = "College tier is required.";
     }
 
     if (form.resumeText.trim().length < 40) {
@@ -71,6 +76,7 @@ export default function CandidateUploadPage() {
       await createCandidate({
         name: form.name.trim(),
         college: form.college.trim(),
+        collegeTier: form.collegeTier,
         resumeText: form.resumeText.trim(),
         githubUsername: form.githubUsername.trim(),
       });
@@ -141,6 +147,25 @@ export default function CandidateUploadPage() {
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="collegeTier">College Tier</Label>
+                <select
+                  id="collegeTier"
+                  value={form.collegeTier}
+                  onChange={(event) => updateField("collegeTier", event.target.value as UploadRequest["collegeTier"])}
+                  className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  aria-invalid={Boolean(errors.collegeTier)}
+                >
+                  <option value="Tier1">Tier 1</option>
+                  <option value="Tier2">Tier 2</option>
+                  <option value="Tier3">Tier 3</option>
+                  <option value="SelfTaught">Self taught</option>
+                </select>
+                {errors.collegeTier ? (
+                  <p className="text-sm text-red-600">{errors.collegeTier}</p>
+                ) : null}
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="githubUsername">GitHub Username</Label>
                 <Input
                   id="githubUsername"
@@ -197,7 +222,7 @@ export default function CandidateUploadPage() {
             <CardDescription>POST /candidate receives the normalized upload payload.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3 text-sm text-muted-foreground">
-            <p>Name, college, resume text, and GitHub username are sent as JSON.</p>
+            <p>Name, college, college tier, resume text, and GitHub username are sent as JSON.</p>
             <p>On success, the form resets and the recruiter returns to the leaderboard.</p>
           </CardContent>
         </Card>

@@ -78,6 +78,7 @@ export interface DashboardStats {
 export interface UploadRequest {
   name: string;
   college: string;
+  collegeTier: "Tier1" | "Tier2" | "Tier3" | "SelfTaught";
   resumeText: string;
   githubUsername: string;
 }

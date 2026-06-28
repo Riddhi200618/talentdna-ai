@@ -204,10 +204,10 @@ export function DetailModal({ candidate, onClose }: DetailModalProps) {
           ) : null}
 
           <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-lg border bg-slate-50 p-5 text-slate-600">
+            <div className="rounded-lg border border-slate-200 bg-white p-5 text-slate-600">
               <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-normal text-slate-500">
                 <GraduationCap className="h-4 w-4" aria-hidden="true" />
-                ATS Would See
+                ATS Would See First
               </div>
               <dl className="space-y-4">
                 <div>
@@ -224,27 +224,27 @@ export function DetailModal({ candidate, onClose }: DetailModalProps) {
                 </div>
                 <div>
                   <dt className="text-xs font-medium text-slate-500">Verdict</dt>
-                  <dd className="mt-1 inline-flex rounded-full border bg-white px-3 py-1 text-sm font-semibold text-slate-600">
+                  <dd className="mt-1 inline-flex rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm font-semibold text-slate-700">
                     {activeDetail.atsWouldSee.verdict}
                   </dd>
                 </div>
               </dl>
             </div>
 
-            <div className="rounded-lg border border-blue-200 bg-blue-50 p-5 text-blue-950 shadow-sm ring-1 ring-blue-100">
-              <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-normal text-blue-700">
+            <div className="rounded-lg border border-emerald-300 bg-emerald-50 p-5 text-emerald-950 shadow-sm ring-1 ring-emerald-100">
+              <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-normal text-emerald-700">
                 <Sparkles className="h-4 w-4" aria-hidden="true" />
-                TalentDNA Sees
+                TalentDNA Sees Next
               </div>
               <dl className="space-y-4">
                 <div>
-                  <dt className="text-xs font-medium text-blue-700">TalentDNA Score</dt>
-                  <dd className="mt-1 text-4xl font-bold text-blue-950">
+                  <dt className="text-xs font-medium text-emerald-700">TalentDNA Score</dt>
+                  <dd className="mt-1 text-4xl font-bold text-emerald-950">
                     {activeDetail.talentDnaSees.talentDnaScore}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs font-medium text-blue-700">Diamond Status</dt>
+                  <dt className="text-xs font-medium text-emerald-700">Diamond Status</dt>
                   <dd className="mt-1">
                     <Badge variant={activeDetail.talentDnaSees.isDiamond ? "success" : "secondary"}>
                       {activeDetail.talentDnaSees.isDiamond ? "Diamond" : "Not diamond"}
@@ -252,8 +252,8 @@ export function DetailModal({ candidate, onClose }: DetailModalProps) {
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs font-medium text-blue-700">Verdict</dt>
-                  <dd className="mt-1 inline-flex rounded-full border border-blue-200 bg-white px-3 py-1 text-sm font-semibold text-blue-700">
+                  <dt className="text-xs font-medium text-emerald-700">Verdict</dt>
+                  <dd className="mt-1 inline-flex rounded-full border border-emerald-200 bg-white px-3 py-1 text-sm font-semibold text-emerald-700">
                     {activeDetail.talentDnaSees.verdict}
                   </dd>
                 </div>
@@ -267,7 +267,7 @@ export function DetailModal({ candidate, onClose }: DetailModalProps) {
             ))}
           </div>
           <div className="rounded-lg border bg-blue-50 p-5">
-            <h3 className="text-base font-semibold text-blue-950">AI Summary</h3>
+            <h3 className="text-base font-semibold text-emerald-950">AI Summary</h3>
             <p className="mt-2 text-sm leading-6 text-slate-700">
               {activeDetail.analysis.aiSummary}
             </p>
@@ -303,7 +303,7 @@ export function DetailModal({ candidate, onClose }: DetailModalProps) {
                     ) : null}
                     {project.url ? (
                       <a
-                        className="mt-3 inline-flex text-sm font-semibold text-blue-700 hover:text-blue-800"
+                        className="mt-3 inline-flex text-sm font-semibold text-emerald-700 hover:text-blue-800"
                         href={project.url}
                         target="_blank"
                         rel="noreferrer"
