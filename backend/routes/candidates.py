@@ -266,14 +266,21 @@ def get_stats(db: Session = Depends(get_db)):
 
 @router.patch("/candidate/{candidate_id}/scores")
 def update_scores(candidate_id: int, scores: dict, db: Session = Depends(get_db)):
+    # Update scores table
     score = db.query(Score).filter(Score.candidate_id == candidate_id).first()
-    if not score:
-        raise HTTPException(status_code=404, detail="Score record not found")
+    if score:
+        for key, value in scores.items():
+            if hasattr(score, key):
+                setattr(score, key, value)
+        db.commit()
 
-    for key, value in scores.items():
-        if hasattr(score, key):
-            setattr(score, key, value)
+    # Update analysis table if ai_summary is provided
+    if "ai_summary" in scores:
+        analysis = db.query(Analysis).filter(
+            Analysis.candidate_id == candidate_id
+        ).first()
+        if analysis:
+            analysis.ai_summary = scores["ai_summary"]
+            db.commit()
 
-    db.commit()
-    db.refresh(score)
-    return {"message": "Scores updated", "candidate_id": candidate_id}
+    return {"message": "Updated", "candidate_id": candidate_id}
