@@ -12,10 +12,15 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Allow frontend to talk to backend during development
+# Allow frontend to talk to backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://talentdna-ai.vercel.app",
+        "http://localhost:5173",
+        "http://localhost:3000",
+    ],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -32,7 +37,13 @@ def health_check():
         "version": "1.0.0"
     }
 
-# Yeh code file ke bilkul niche check karke paste kar dena:
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("backend.main:app", host="127.0.0.1", port=8000, reload=True)
+    import os
+    
+    # Render sets the PORT environment variable.
+    port = int(os.environ.get("PORT", 8000))
+    # In production (e.g. on Render) we bind to 0.0.0.0, locally we bind to 127.0.0.1.
+    host = "0.0.0.0" if os.environ.get("PORT") else "127.0.0.1"
+    
+    uvicorn.run("backend.main:app", host=host, port=port, reload=True)
