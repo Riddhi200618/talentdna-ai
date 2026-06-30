@@ -154,25 +154,25 @@ export function DetailModal({ candidate, onClose }: DetailModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#05050A]/85 backdrop-blur-md p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="candidate-detail-title"
       onMouseDown={onClose}
     >
       <Card
-        className="max-h-[90vh] w-full max-w-5xl overflow-y-auto shadow-2xl"
+        className="max-h-[90vh] w-full max-w-5xl overflow-y-auto shadow-2xl glass-panel-heavy rounded-2xl border border-outline-variant/15 relative scrollbar-thin scrollbar-thumb-outline-variant/30 scrollbar-track-transparent animate-modal-enter"
         onMouseDown={(event) => event.stopPropagation()}
       >
-        <div className="flex items-start justify-between gap-4 border-b p-6">
+        <div className="flex items-start justify-between gap-4 border-b border-outline-variant/10 p-6">
           <div>
             <div className="mb-3">
               <DiamondBadge status={activeDetail.scores.isDiamond ? "Diamond" : candidate.diamondStatus} />
             </div>
-            <h2 id="candidate-detail-title" className="text-2xl font-bold text-slate-950">
+            <h2 id="candidate-detail-title" className="text-2xl font-black text-white font-hanken tracking-tight">
               {activeDetail.name}
             </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 text-sm text-on-surface-variant/80 font-medium font-hanken">
               {activeDetail.atsWouldSee.college}
             </p>
           </div>
@@ -182,69 +182,69 @@ export function DetailModal({ candidate, onClose }: DetailModalProps) {
         </div>
         <CardContent className="space-y-6 p-6">
           {isLoading ? (
-            <div className="grid gap-3 rounded-lg border bg-slate-50 p-5 sm:grid-cols-3">
+            <div className="grid gap-3 rounded-xl border border-outline-variant/10 bg-[#0e0e14]/50 p-5 sm:grid-cols-3">
               {[0, 1, 2].map((item) => (
-                <div key={item} className="h-24 animate-pulse rounded-md bg-white" />
+                <div key={item} className="h-24 animate-pulse rounded-lg bg-primary-container/10 border border-outline-variant/10" />
               ))}
-              <div className="flex items-center gap-2 text-sm text-muted-foreground sm:col-span-3">
-                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                Loading complete TalentDNA profile
+              <div className="flex items-center gap-2 text-sm text-on-surface-variant sm:col-span-3">
+                <Loader2 className="h-4 w-4 animate-spin text-lp-primary" aria-hidden="true" />
+                Loading complete TalentDNA profile...
               </div>
             </div>
           ) : null}
 
           {error ? (
-            <div className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+            <div className="flex items-start gap-3 rounded-xl border border-rose-500/20 bg-rose-500/10 p-4 text-sm text-rose-400 font-hanken">
               <AlertTriangle className="mt-0.5 h-4 w-4 flex-none" aria-hidden="true" />
               <div>
-                <p className="font-semibold">Could not load full profile</p>
+                <p className="font-bold">Could not load full profile</p>
                 <p className="mt-1">{error}</p>
               </div>
             </div>
           ) : null}
 
           <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-lg border border-slate-200 bg-white p-5 text-slate-600">
-              <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-normal text-slate-500">
+            <div className="rounded-xl border border-outline-variant/10 bg-[#0e0e14]/50 p-5 text-on-surface-variant font-hanken">
+              <div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-on-surface-variant/60">
                 <GraduationCap className="h-4 w-4" aria-hidden="true" />
                 ATS Would See First
               </div>
               <dl className="space-y-4">
                 <div>
-                  <dt className="text-xs font-medium text-slate-500">College</dt>
-                  <dd className="mt-1 text-lg font-semibold text-slate-800">
+                  <dt className="text-xs font-semibold text-on-surface-variant/50 uppercase tracking-wider">College</dt>
+                  <dd className="mt-1 text-lg font-bold text-on-surface">
                     {activeDetail.atsWouldSee.college}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs font-medium text-slate-500">Pedigree Score</dt>
-                  <dd className="mt-1 text-3xl font-bold text-slate-700">
+                  <dt className="text-xs font-semibold text-on-surface-variant/50 uppercase tracking-wider">Pedigree Score</dt>
+                  <dd className="mt-1 text-3xl font-extrabold text-on-surface-variant/80 tracking-tight">
                     {activeDetail.atsWouldSee.pedigreeScore}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs font-medium text-slate-500">Verdict</dt>
-                  <dd className="mt-1 inline-flex rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm font-semibold text-slate-700">
+                  <dt className="text-xs font-semibold text-on-surface-variant/50 uppercase tracking-wider">Verdict</dt>
+                  <dd className="mt-2 inline-flex rounded-full border border-outline-variant/20 bg-[#131319]/80 px-3 py-1 text-sm font-semibold text-on-surface-variant/80">
                     {activeDetail.atsWouldSee.verdict}
                   </dd>
                 </div>
               </dl>
             </div>
 
-            <div className="rounded-lg border border-emerald-300 bg-emerald-50 p-5 text-emerald-950 shadow-sm ring-1 ring-emerald-100">
-              <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-normal text-emerald-700">
+            <div className="rounded-xl border border-lp-primary/25 bg-primary-container/10 p-5 text-on-surface shadow-md ring-1 ring-lp-primary/25 glow-primary font-hanken">
+              <div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-lp-primary">
                 <Sparkles className="h-4 w-4" aria-hidden="true" />
                 TalentDNA Sees Next
               </div>
               <dl className="space-y-4">
                 <div>
-                  <dt className="text-xs font-medium text-emerald-700">TalentDNA Score</dt>
-                  <dd className="mt-1 text-4xl font-bold text-emerald-950">
+                  <dt className="text-xs font-semibold text-lp-primary uppercase tracking-wider">TalentDNA Score</dt>
+                  <dd className="mt-1 text-4xl font-extrabold text-white tracking-tight">
                     {activeDetail.talentDnaSees.talentDnaScore}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs font-medium text-emerald-700">Diamond Status</dt>
+                  <dt className="text-xs font-semibold text-lp-primary uppercase tracking-wider">Diamond Status</dt>
                   <dd className="mt-1">
                     <Badge variant={activeDetail.talentDnaSees.isDiamond ? "success" : "secondary"}>
                       {activeDetail.talentDnaSees.isDiamond ? "Diamond" : "Not diamond"}
@@ -252,8 +252,8 @@ export function DetailModal({ candidate, onClose }: DetailModalProps) {
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs font-medium text-emerald-700">Verdict</dt>
-                  <dd className="mt-1 inline-flex rounded-full border border-emerald-200 bg-white px-3 py-1 text-sm font-semibold text-emerald-700">
+                  <dt className="text-xs font-semibold text-lp-primary uppercase tracking-wider">Verdict</dt>
+                  <dd className="mt-2 inline-flex rounded-full border border-lp-primary/25 bg-[#131319]/80 px-3 py-1 text-sm font-semibold text-lp-primary">
                     {activeDetail.talentDnaSees.verdict}
                   </dd>
                 </div>
@@ -266,44 +266,48 @@ export function DetailModal({ candidate, onClose }: DetailModalProps) {
               <ScoreCard key={score.label} {...score} />
             ))}
           </div>
-          <div className="rounded-lg border bg-blue-50 p-5">
-            <h3 className="text-base font-semibold text-emerald-950">AI Summary</h3>
-            <p className="mt-2 text-sm leading-6 text-slate-700">
+
+          <div className="rounded-xl border border-lp-primary/20 bg-primary-container/10 p-5 shadow-inner font-hanken">
+            <h3 className="text-xs font-bold text-lp-primary uppercase tracking-wider flex items-center gap-2">
+              <Sparkles className="h-4.5 w-4.5" aria-hidden="true" />
+              AI Summary
+            </h3>
+            <p className="mt-2 text-sm leading-6 text-on-surface-variant/90">
               {activeDetail.analysis.aiSummary}
             </p>
           </div>
 
           <div>
-            <h3 className="text-base font-semibold text-slate-950">Top Skills</h3>
+            <h3 className="text-xs font-bold text-on-surface-variant/70 font-hanken uppercase tracking-wider border-b border-outline-variant/10 pb-2">Top Skills</h3>
             <div className="mt-3 flex flex-wrap gap-2">
               {activeDetail.analysis.topSkills.length > 0 ? (
                 activeDetail.analysis.topSkills.map((skill) => (
-                  <Badge key={skill} variant="outline" className="bg-white">
+                  <Badge key={skill} variant="outline" className="bg-[#131319]/40 text-on-surface-variant/90 border-outline-variant/20 px-3 py-1 text-xs">
                     {skill}
                   </Badge>
                 ))
               ) : (
-                <p className="text-sm text-muted-foreground">No skills returned yet.</p>
+                <p className="text-sm text-on-surface-variant/60 font-hanken">No skills returned yet.</p>
               )}
             </div>
           </div>
 
           <div>
-            <h3 className="text-base font-semibold text-slate-950">Top Projects</h3>
+            <h3 className="text-xs font-bold text-on-surface-variant/70 font-hanken uppercase tracking-wider border-b border-outline-variant/10 pb-2">Top Projects</h3>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               {activeDetail.analysis.topProjects.length > 0 ? (
                 activeDetail.analysis.topProjects.map((project) => (
-                  <div key={`${project.name}-${project.url ?? ""}`} className="rounded-lg border bg-white p-4">
-                    <div className="flex items-center gap-2 font-semibold text-slate-950">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+                  <div key={`${project.name}-${project.url ?? ""}`} className="rounded-xl border border-outline-variant/10 bg-[#0e0e14]/50 p-4 font-hanken">
+                    <div className="flex items-center gap-2 font-bold text-on-surface text-sm">
+                      <CheckCircle2 className="h-4 w-4 text-lp-primary" aria-hidden="true" />
                       {project.name}
                     </div>
                     {project.description ? (
-                      <p className="mt-2 text-sm leading-6 text-slate-600">{project.description}</p>
+                      <p className="mt-2 text-sm leading-6 text-on-surface-variant/85">{project.description}</p>
                     ) : null}
                     {project.url ? (
                       <a
-                        className="mt-3 inline-flex text-sm font-semibold text-emerald-700 hover:text-blue-800"
+                        className="mt-3 inline-flex text-sm font-bold text-lp-primary hover:opacity-80 transition-opacity"
                         href={project.url}
                         target="_blank"
                         rel="noreferrer"
@@ -314,23 +318,23 @@ export function DetailModal({ candidate, onClose }: DetailModalProps) {
                   </div>
                 ))
               ) : (
-                <div className="rounded-lg border bg-white p-4 text-sm text-muted-foreground sm:col-span-2">
+                <div className="rounded-xl border border-outline-variant/10 bg-[#0e0e14]/50 p-4 text-sm text-on-surface-variant/60 sm:col-span-2">
                   No top projects returned by the API yet.
                 </div>
               )}
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2 border-t border-outline-variant/10 pt-4 font-hanken">
             <div>
-              <p className="text-sm font-medium text-slate-700">GitHub</p>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="text-xs font-bold text-on-surface-variant/50 uppercase tracking-wider">GitHub</p>
+              <p className="mt-1 text-sm font-bold text-on-surface">
                 {candidate.githubUsername ? `@${candidate.githubUsername}` : "Not provided"}
               </p>
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-700">Resume Signal</p>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="text-xs font-bold text-on-surface-variant/50 uppercase tracking-wider">Resume Signal</p>
+              <p className="mt-1 text-sm font-bold text-on-surface">
                 {candidate.resumeText ? "Resume text available" : "Waiting for backend payload"}
               </p>
             </div>

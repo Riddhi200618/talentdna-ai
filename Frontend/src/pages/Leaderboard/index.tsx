@@ -99,12 +99,12 @@ export default function LeaderboardPage() {
       )}
 
       {!statsLoading && statsError ? (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+        <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-400 font-hanken">
           Stats API unavailable, showing totals from loaded candidates.
         </div>
       ) : null}
 
-      <Card className="shadow-sm">
+      <Card className="shadow-sm border border-outline-variant/10">
         <CardContent className="flex flex-col gap-3 p-4 md:flex-row md:items-center md:justify-between">
           <div className="relative w-full md:max-w-md">
             <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />

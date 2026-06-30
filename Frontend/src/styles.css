@@ -22,6 +22,24 @@
     --radius: 0.5rem;
   }
 
+  .dark {
+    --background: 240 33% 3%; /* Deep Obsidian #05050A */
+    --foreground: 260 14% 90%; /* on-surface: #e4e1ea */
+    --card: 240 15% 8%; /* surface: #131319 */
+    --card-foreground: 260 14% 90%;
+    --muted: 240 10% 12%; /* surface-container-low: #1b1b22 */
+    --muted-foreground: 224 20% 80%; /* on-surface-variant: #c1c6d6 */
+    --accent: 240 10% 14%; /* surface-container: #1f1f26 */
+    --accent-foreground: 220 100% 84%; /* primary: #acc7ff */
+    --primary: 217 100% 64%; /* primary-container: #498eff */
+    --primary-foreground: 214 100% 18%; /* on-primary-container: #00285b */
+    --destructive: 356 100% 29%; /* error-container: #93000a */
+    --destructive-foreground: 358 100% 92%; /* on-error-container: #ffdad6 */
+    --border: 221 12% 29%; /* outline-variant: #414753 */
+    --input: 240 10% 12%; /* surface-container-low */
+    --ring: 220 100% 84%; /* primary */
+  }
+
   * {
     @apply border-border;
   }
@@ -32,4 +50,91 @@
       Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
       sans-serif;
   }
+}
+
+@layer utilities {
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  }
+  .glass-panel-heavy {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  }
+  .glow-primary {
+    box-shadow: 0px 0px 20px rgba(73, 142, 255, 0.3);
+  }
+  .glow-secondary {
+    box-shadow: 0px 0px 30px rgba(87, 27, 193, 0.2);
+  }
+  .bg-gradient-radial {
+    background: radial-gradient(circle at center, rgba(87, 27, 193, 0.15) 0%, rgba(5, 5, 10, 1) 70%);
+  }
+  .text-gradient {
+    background: linear-gradient(to right, #acc7ff, #e4e1ea);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Table design utilities */
+  .lp-table-container {
+    @apply overflow-hidden glass-panel rounded-2xl shadow-xl border border-outline-variant/10 w-full;
+  }
+  .lp-table {
+    @apply w-full min-w-[800px] border-collapse text-left text-sm font-hanken;
+  }
+  .lp-th {
+    @apply px-5 py-4 font-semibold text-xs uppercase tracking-wider text-on-surface-variant bg-surface-container-high/40 select-none;
+  }
+  .lp-td {
+    @apply px-5 py-4 border-b border-outline-variant/5 text-on-surface-variant align-middle;
+  }
+  .lp-tr-hover {
+    @apply cursor-pointer transition-all duration-200 hover:bg-primary-container/10 hover:shadow-inner;
+  }
+
+  /* Modal design utilities */
+  .lp-modal-backdrop {
+    @apply fixed inset-0 z-50 flex items-center justify-center bg-[#05050A]/70 backdrop-blur-md p-4;
+  }
+  .lp-modal-content {
+    @apply max-h-[90vh] w-full max-w-5xl overflow-y-auto glass-panel-heavy rounded-2xl shadow-2xl border border-outline-variant/20 relative focus-visible:outline-none;
+  }
+
+  /* Custom scrollbar utility for dark panels */
+  .dark ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .dark ::-webkit-scrollbar-track {
+    background: rgba(31, 31, 38, 0.2);
+    border-radius: 9999px;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: rgba(140, 144, 159, 0.3);
+    border-radius: 9999px;
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: rgba(73, 142, 255, 0.5);
+  }
+}
+
+@keyframes modalEntrance {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animate-modal-enter {
+  animation: modalEntrance 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

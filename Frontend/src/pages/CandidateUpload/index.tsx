@@ -103,17 +103,17 @@ export default function CandidateUploadPage() {
       />
 
       {toast ? (
-        <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
+        <div className="flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm font-semibold text-emerald-400 font-hanken shadow-lg mb-6">
           <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
           {toast}
         </div>
       ) : null}
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-        <Card>
+      <div className="max-w-3xl mx-auto w-full font-hanken">
+        <Card className="border border-outline-variant/10">
           <CardHeader>
             <CardTitle>Candidate Details</CardTitle>
-            <CardDescription>
+            <CardDescription className="dark:text-on-surface-variant/80">
               Required fields are validated before the profile is sent to the API.
             </CardDescription>
           </CardHeader>
@@ -121,7 +121,7 @@ export default function CandidateUploadPage() {
             <form className="space-y-5" onSubmit={handleSubmit} noValidate>
               <div className="grid gap-5 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Name</Label>
+                  <Label htmlFor="name" className="text-on-surface font-semibold">Name</Label>
                   <Input
                     id="name"
                     value={form.name}
@@ -129,10 +129,10 @@ export default function CandidateUploadPage() {
                     placeholder="Priya Nair"
                     aria-invalid={Boolean(errors.name)}
                   />
-                  {errors.name ? <p className="text-sm text-red-600">{errors.name}</p> : null}
+                  {errors.name ? <p className="text-xs font-bold text-rose-400 mt-1 font-hanken">{errors.name}</p> : null}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="college">College</Label>
+                  <Label htmlFor="college" className="text-on-surface font-semibold">College</Label>
                   <Input
                     id="college"
                     value={form.college}
@@ -141,32 +141,32 @@ export default function CandidateUploadPage() {
                     aria-invalid={Boolean(errors.college)}
                   />
                   {errors.college ? (
-                    <p className="text-sm text-red-600">{errors.college}</p>
+                    <p className="text-xs font-bold text-rose-400 mt-1 font-hanken">{errors.college}</p>
                   ) : null}
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="collegeTier">College Tier</Label>
+                <Label htmlFor="collegeTier" className="text-on-surface font-semibold">College Tier</Label>
                 <select
                   id="collegeTier"
                   value={form.collegeTier}
                   onChange={(event) => updateField("collegeTier", event.target.value as UploadRequest["collegeTier"])}
-                  className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="flex h-10 w-full rounded-lg border border-outline-variant/30 bg-[#0e0e14]/60 px-3 py-2 text-sm text-on-surface shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lp-primary/10 shadow-inner transition-all duration-200"
                   aria-invalid={Boolean(errors.collegeTier)}
                 >
-                  <option value="Tier1">Tier 1</option>
-                  <option value="Tier2">Tier 2</option>
-                  <option value="Tier3">Tier 3</option>
-                  <option value="SelfTaught">Self taught</option>
+                  <option value="Tier1" className="bg-[#131319] text-on-surface">Tier 1</option>
+                  <option value="Tier2" className="bg-[#131319] text-on-surface">Tier 2</option>
+                  <option value="Tier3" className="bg-[#131319] text-on-surface">Tier 3</option>
+                  <option value="SelfTaught" className="bg-[#131319] text-on-surface">Self taught</option>
                 </select>
                 {errors.collegeTier ? (
-                  <p className="text-sm text-red-600">{errors.collegeTier}</p>
+                  <p className="text-xs font-bold text-rose-400 mt-1 font-hanken">{errors.collegeTier}</p>
                 ) : null}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="githubUsername">GitHub Username</Label>
+                <Label htmlFor="githubUsername" className="text-on-surface font-semibold">GitHub Username</Label>
                 <Input
                   id="githubUsername"
                   value={form.githubUsername}
@@ -175,12 +175,12 @@ export default function CandidateUploadPage() {
                   aria-invalid={Boolean(errors.githubUsername)}
                 />
                 {errors.githubUsername ? (
-                  <p className="text-sm text-red-600">{errors.githubUsername}</p>
+                  <p className="text-xs font-bold text-rose-400 mt-1 font-hanken">{errors.githubUsername}</p>
                 ) : null}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="resumeText">Resume Text</Label>
+                <Label htmlFor="resumeText" className="text-on-surface font-semibold">Resume Text</Label>
                 <Textarea
                   id="resumeText"
                   value={form.resumeText}
@@ -189,12 +189,12 @@ export default function CandidateUploadPage() {
                   aria-invalid={Boolean(errors.resumeText)}
                 />
                 {errors.resumeText ? (
-                  <p className="text-sm text-red-600">{errors.resumeText}</p>
+                  <p className="text-xs font-bold text-rose-400 mt-1 font-hanken">{errors.resumeText}</p>
                 ) : null}
               </div>
 
               {apiError ? (
-                <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                <div className="rounded-xl border border-rose-500/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-400 font-hanken">
                   {apiError}
                 </div>
               ) : null}
@@ -213,17 +213,6 @@ export default function CandidateUploadPage() {
                 )}
               </Button>
             </form>
-          </CardContent>
-        </Card>
-
-        <Card className="h-fit shadow-sm">
-          <CardHeader>
-            <CardTitle>Backend Contract</CardTitle>
-            <CardDescription>POST /candidate receives the normalized upload payload.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm text-muted-foreground">
-            <p>Name, college, college tier, resume text, and GitHub username are sent as JSON.</p>
-            <p>On success, the form resets and the recruiter returns to the leaderboard.</p>
           </CardContent>
         </Card>
       </div>

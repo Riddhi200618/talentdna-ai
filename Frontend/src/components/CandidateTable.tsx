@@ -63,15 +63,18 @@ export function CandidateTable({ candidates, onSelectCandidate }: CandidateTable
   }
 
   return (
-    <Card className="overflow-hidden shadow-sm">
+    <div className="lp-table-container">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[920px] border-collapse text-left text-sm">
-          <thead className="sticky top-0 z-10 bg-slate-50 text-xs uppercase tracking-normal text-slate-500 shadow-sm">
+        <table className="lp-table min-w-[920px]">
+          <thead className="sticky top-0 z-10 bg-[#1f1f26]/90 backdrop-blur-md border-b border-outline-variant/10 shadow-sm">
             <tr>
               {columns.map((column) => (
-                <th key={column.key} className="px-5 py-4 font-semibold">
+                <th
+                  key={column.key}
+                  className="px-5 py-4 font-semibold text-xs uppercase tracking-wider text-on-surface-variant font-hanken bg-surface-container-high/40 select-none"
+                >
                   <button
-                    className={`flex items-center gap-2 ${
+                    className={`flex items-center gap-2 hover:text-lp-primary transition-colors duration-200 ${
                       column.align === "right" ? "ml-auto" : ""
                     }`}
                     onClick={() => handleSort(column.key)}
@@ -81,45 +84,53 @@ export function CandidateTable({ candidates, onSelectCandidate }: CandidateTable
                   </button>
                 </th>
               ))}
-              <th className="px-5 py-4 text-right font-semibold">Actions</th>
+              <th className="px-5 py-4 text-right font-semibold text-xs uppercase tracking-wider text-on-surface-variant font-hanken bg-surface-container-high/40 select-none">
+                Actions
+              </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border bg-white">
+          <tbody className="divide-y divide-outline-variant/5 bg-transparent">
             {sortedCandidates.map((candidate) => (
               <tr
                 key={candidate.id}
                 className={cn(
-                  "cursor-pointer transition-all hover:bg-blue-50/70 hover:shadow-sm",
+                  "lp-tr-hover border-b border-outline-variant/5",
                   candidate.diamondStatus === "Diamond" &&
-                    "bg-blue-50/60 ring-1 ring-inset ring-blue-100",
+                    "bg-primary-container/5 hover:bg-primary-container/10",
                 )}
                 onClick={() => onSelectCandidate(candidate)}
               >
-                <td className="px-5 py-4">
-                  <div className="font-semibold text-slate-950">{candidate.name}</div>
+                <td className="px-5 py-4 lp-td">
+                  <div className="font-bold text-on-surface font-hanken text-sm">
+                    {candidate.name}
+                  </div>
                   {candidate.githubUsername ? (
-                    <div className="text-xs text-muted-foreground">@{candidate.githubUsername}</div>
+                    <div className="text-xs text-on-surface-variant/70">
+                      @{candidate.githubUsername}
+                    </div>
                   ) : null}
                 </td>
-                <td className="px-5 py-4 text-slate-600">{candidate.college}</td>
-                <td className="px-5 py-4 text-right font-semibold text-slate-950">
+                <td className="px-5 py-4 lp-td text-on-surface-variant font-hanken">
+                  {candidate.college}
+                </td>
+                <td className="px-5 py-4 lp-td text-right font-bold text-on-surface font-hanken">
                   {formatScore(candidate.talentDnaScore)}
                 </td>
-                <td className="px-5 py-4 text-right text-slate-600">
+                <td className="px-5 py-4 lp-td text-right text-on-surface-variant font-hanken">
                   {formatScore(candidate.pedigreeScore)}
                 </td>
                 <td
                   className={cn(
-                    "px-5 py-4 text-right font-semibold",
-                    candidate.gap >= 0 ? "text-emerald-600" : "text-red-600",
+                    "px-5 py-4 lp-td text-right font-bold font-hanken",
+                    candidate.gap >= 0 ? "text-emerald-400" : "text-rose-400",
                   )}
                 >
                   {formatGap(candidate.gap)}
                 </td>
-                <td className="px-5 py-4">
+                <td className="px-5 py-4 lp-td">
                   <DiamondBadge status={candidate.diamondStatus} />
                 </td>
-                <td className="px-5 py-4 text-right">
+                <td className="px-5 py-4 lp-td text-right">
                   <Button
                     variant="outline"
                     size="sm"
@@ -137,6 +148,6 @@ export function CandidateTable({ candidates, onSelectCandidate }: CandidateTable
           </tbody>
         </table>
       </div>
-    </Card>
+    </div>
   );
 }

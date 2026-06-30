@@ -21,28 +21,29 @@ export default function DiamondPanelPage() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-lg border border-blue-100 bg-white p-6 shadow-sm">
-        <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+      <div className="glass-panel-heavy rounded-2xl p-8 border border-outline-variant/15 shadow-2xl relative overflow-hidden group font-hanken">
+        <div className="absolute -right-20 -top-20 w-80 h-80 bg-lp-primary/10 rounded-full blur-3xl pointer-events-none transition-opacity group-hover:bg-lp-primary/20 duration-500" />
+        <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center relative z-10">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-normal text-blue-700">
+            <p className="text-xs font-bold uppercase tracking-wider text-lp-primary">
               ATS sees pedigree. TalentDNA sees actual talent.
             </p>
-            <h1 className="mt-2 text-3xl font-bold tracking-normal text-slate-950 sm:text-4xl">
+            <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-on-surface sm:text-4xl leading-tight">
               Surface overlooked builders before competitors do.
             </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-on-surface-variant/80">
               Diamond candidates combine strong execution signals with a high pedigree gap,
               giving recruiters a focused shortlist for immediate review.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-lg bg-slate-50 p-4">
-              <p className="text-sm text-slate-500">Traditional screen</p>
-              <p className="mt-2 text-2xl font-bold text-slate-700">Pedigree</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="rounded-xl border border-outline-variant/10 bg-[#0e0e14]/50 p-5 shadow-inner">
+              <p className="text-xs font-semibold text-on-surface-variant/50 uppercase tracking-wider">Traditional screen</p>
+              <p className="mt-2 text-xl font-black text-on-surface-variant/80">Pedigree</p>
             </div>
-            <div className="rounded-lg bg-blue-50 p-4 ring-1 ring-blue-100">
-              <p className="text-sm text-blue-700">TalentDNA screen</p>
-              <p className="mt-2 text-2xl font-bold text-blue-950">Potential</p>
+            <div className="rounded-xl border border-lp-primary/25 bg-primary-container/10 p-5 shadow-md ring-1 ring-lp-primary/25 glow-primary transition-all duration-300 hover:border-lp-primary/45">
+              <p className="text-xs font-bold text-lp-primary uppercase tracking-wider">TalentDNA screen</p>
+              <p className="mt-2 text-xl font-black text-white tracking-tight">Potential</p>
             </div>
           </div>
         </div>
