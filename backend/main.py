@@ -6,6 +6,24 @@ from backend.routes import candidates
 # Create all tables on startup
 Base.metadata.create_all(bind=engine)
 
+from backend.database import SessionLocal, Candidate
+
+def auto_seed_if_empty():
+    db = SessionLocal()
+    count = db.query(Candidate).count()
+    db.close()
+
+    if count == 0:
+        print("Database is empty. Auto-seeding...")
+        import threading
+        from seed_remote_internal import run_seed
+        thread = threading.Thread(target=run_seed)
+        thread.start()
+    else:
+        print(f"Database already has {count} candidates. Skipping seed.")
+
+auto_seed_if_empty()
+
 app = FastAPI(
     title="TalentDNA AI",
     description="Hidden talent discovery engine",
